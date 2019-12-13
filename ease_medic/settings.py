@@ -21,6 +21,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'users',
+    'prescription_gen',
 
     ## Default
     'django.contrib.admin',
