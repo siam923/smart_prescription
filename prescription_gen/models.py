@@ -13,17 +13,21 @@ class Medicine(models.Model):
     def __str__(self):
         return self.name
 
+class Prescription(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}. Prescription for {} by {} {}".format(self.id,
+                self.patient.user.first_name, self.doctor.user.first_name,
+                self.timestamp)
 
 class PrescriptionMedicine(models.Model):
+    prescription = models.ForeignKey('Prescription', related_name='pr_med', on_delete=models.CASCADE)
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
     timing = models.CharField(max_length=20, default = '1 + 0 + 1')
     duration = models.CharField(max_length=20, default = '1 week')
 
-
-class Prescription(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    medicines = models.ManyToManyField(PrescriptionMedicine, blank=True)
-
     def __str__(self):
-        return "prescription for {} by {}".format(self.patient.user.first_name, self.doctor.user.first_name)
+        return self.medicine.name
