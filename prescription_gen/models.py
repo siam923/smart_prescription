@@ -17,11 +17,15 @@ class Prescription(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    tests = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return "{}. Prescription for {} by {} {}".format(self.id,
                 self.patient.user.first_name, self.doctor.user.first_name,
                 self.timestamp)
+
+    def get_absolute_url(self):
+        return reverse('pr_update', kwargs={'pk': self.pk})
 
 class PrescriptionMedicine(models.Model):
     prescription = models.ForeignKey('Prescription', related_name='pr_med', on_delete=models.CASCADE)

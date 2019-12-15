@@ -12,6 +12,7 @@
   {% for patient in object_list %}
     <li>
       {{ patient.user.first_name }} {{ patient.user.last_name }}
+      <p>{{patient.user.id}}</p>
     </li>
   {% endfor %}
 </ul>
