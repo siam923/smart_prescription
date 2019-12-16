@@ -42,3 +42,12 @@ class PatientSignUpView(CreateView):
 class DoctorsListView(ListView):
     model = Doctor
     template_name = 'users/doctor_list.html'
+
+
+class PatientDetailView(DetailView):
+    model = Patient
+    template_name = 'users/patient_detail.html'
+
+class DoctorDetailView(DetailView):
+    model = Doctor
+    template_name = 'users/doctor_detail.html'

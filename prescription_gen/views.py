@@ -41,9 +41,10 @@ class PrescriptionMedicineUpdateView(TemplateResponseMixin, View):
 
     def post(self, request, *args, **kwargs):
         formset = self.get_formset(data=request.POST)
+        p_key = self.kwargs['pk']
         if formset.is_valid():
             formset.save()
-            return redirect('home') ## Update with prescription detail
+            return redirect('pr_update', p_key) ## Update with prescription detail
         return self.render_to_response({'prescription': self.prescription,
                                         'formset': formset})
 

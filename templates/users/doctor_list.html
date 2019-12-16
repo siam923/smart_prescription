@@ -16,7 +16,7 @@
 
         <span class="text-muted">from </span>
         {{ doctor.MBBS_Inst }}
-        <span class="text-info">PostGrad: {{doctor.PostGrad_details}} </span>
+        <a href="{% url 'doctor_detail' doctor.pk %}"> View </a>
       </div>
     </div>
 
