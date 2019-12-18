@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -53,16 +53,6 @@ class PrescriptionCreateView(CreateView):
     fields = ['tests']
     template_name = 'prescription_gen/pr_create.html'
 
-    # def get_success_url(self):
-    #         return reverse('pr_update', kwargs={'pk': self.object.pk})
-    #
-    # def post(self, request, *args, **kwargs):
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         self.fcc_form = form.save(commit=True)
-    #         #messages.add_message(self.request, messages,INFO, 'prescription created')
-    #         return HttpResponseRedirect(reverse('pr_update', kwargs={'pk': self.fcc_form.uuid}))
-
     def form_valid(self, form):
         user = self.request.user
         doctor = Doctor.objects.get(user=user)
@@ -96,3 +86,17 @@ class PrescriptionDetailView(DetailView):
         id = self.kwargs['pk']
         context['medicines'] = PrescriptionMedicine.objects.filter(prescription__id=id)
         return context
+
+
+class PrescriptionListView(ListView):
+    model = Prescription
+    template_name = 'prescription_gen/pr_list.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(patient__user=self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
+        flag = request.user.is_patient
+        if not flag:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
